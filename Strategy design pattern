@@ -1,0 +1,110 @@
+The Strategy Design Pattern is a behavioral design pattern that defines a family of algorithms, encapsulates each one, and makes them interchangeable. This allows the algorithm to vary independently from clients that use it.
+
+Concept
+Context: The class that contains a reference to a strategy.
+Strategy Interface: An interface common to all supported algorithms.
+Concrete Strategies: Implementations of the strategy interface.
+The context interacts with the strategy interface, so it is not affected by which strategy is used.
+
+Example: Payment Processing
+Imagine an e-commerce application where you need to process payments using different methods, such as credit cards, PayPal, or bank transfers.
+
+Without Strategy Pattern
+If you directly implement all payment methods in one class, it violates the Open-Closed Principle.
+
+java
+Copy code
+class PaymentProcessor {
+    public void processPayment(String method) {
+        if (method.equals("creditCard")) {
+            System.out.println("Processing credit card payment...");
+        } else if (method.equals("paypal")) {
+            System.out.println("Processing PayPal payment...");
+        } else if (method.equals("bankTransfer")) {
+            System.out.println("Processing bank transfer...");
+        } else {
+            throw new IllegalArgumentException("Unknown payment method");
+        }
+    }
+}
+Adding a new payment method requires modifying the class, which is error-prone and not scalable.
+
+With Strategy Pattern
+Encapsulate each payment method as a strategy.
+
+Step 1: Define the Strategy Interface
+
+java
+Copy code
+interface PaymentStrategy {
+    void pay(double amount);
+}
+Step 2: Implement Concrete Strategies
+
+java
+Copy code
+class CreditCardPayment implements PaymentStrategy {
+    @Override
+    public void pay(double amount) {
+        System.out.println("Paid " + amount + " using Credit Card.");
+    }
+}
+
+class PayPalPayment implements PaymentStrategy {
+    @Override
+    public void pay(double amount) {
+        System.out.println("Paid " + amount + " using PayPal.");
+    }
+}
+
+class BankTransferPayment implements PaymentStrategy {
+    @Override
+    public void pay(double amount) {
+        System.out.println("Paid " + amount + " using Bank Transfer.");
+    }
+}
+Step 3: Create the Context
+
+java
+Copy code
+class PaymentProcessor {
+    private PaymentStrategy paymentStrategy;
+
+    public PaymentProcessor(PaymentStrategy paymentStrategy) {
+        this.paymentStrategy = paymentStrategy;
+    }
+
+    public void executePayment(double amount) {
+        paymentStrategy.pay(amount);
+    }
+}
+Step 4: Use the Context
+
+java
+Copy code
+public class Main {
+    public static void main(String[] args) {
+        PaymentProcessor creditCardPayment = new PaymentProcessor(new CreditCardPayment());
+        creditCardPayment.executePayment(100.00);
+
+        PaymentProcessor payPalPayment = new PaymentProcessor(new PayPalPayment());
+        payPalPayment.executePayment(200.00);
+
+        PaymentProcessor bankTransferPayment = new PaymentProcessor(new BankTransferPayment());
+        bankTransferPayment.executePayment(300.00);
+    }
+}
+Output:
+
+arduino
+Copy code
+Paid 100.0 using Credit Card.
+Paid 200.0 using PayPal.
+Paid 300.0 using Bank Transfer.
+Benefits of Strategy Pattern
+Open-Closed Principle: You can add new strategies without modifying existing code.
+Encapsulation: Each algorithm is encapsulated in its own class.
+Flexibility: You can switch strategies at runtime.
+When to Use the Strategy Pattern
+When you have multiple algorithms for a specific task and want to choose the appropriate algorithm dynamically.
+When you want to avoid using conditionals to switch between behaviors.
