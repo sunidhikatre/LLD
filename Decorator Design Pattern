@@ -1,0 +1,101 @@
+The Decorator Design Pattern is used to dynamically add functionality to an object at runtime without modifying its structure. This pattern involves creating a set of decorator classes that are used to wrap concrete components.
+
+Concept Example
+Imagine a coffee shop where you can add extras like milk or sugar to a coffee. Each addition increases the cost, but the base coffee remains unchanged.
+
+Step 1: Define the Component Interface
+
+// Component
+public interface Coffee {
+    String getDescription();
+    double getCost();
+}
+Step 2: Create Concrete Components
+
+// Concrete Component
+public class SimpleCoffee implements Coffee {
+    @Override
+    public String getDescription() {
+        return "Simple Coffee";
+    }
+
+    @Override
+    public double getCost() {
+        return 5.0; // Base cost
+    }
+}
+
+Step 3: Create the Decorator Abstract Class
+// Decorator
+public abstract class CoffeeDecorator implements Coffee {
+    protected Coffee decoratedCoffee;
+
+    public CoffeeDecorator(Coffee coffee) {
+        this.decoratedCoffee = coffee;
+    }
+
+    @Override
+    public String getDescription() {
+        return decoratedCoffee.getDescription();
+    }
+
+    @Override
+    public double getCost() {
+        return decoratedCoffee.getCost();
+    }
+}
+Step 4: Create Concrete Decorators
+
+// Concrete Decorator for Milk
+public class MilkDecorator extends CoffeeDecorator {
+    public MilkDecorator(Coffee coffee) {
+        super(coffee);
+    }
+
+    @Override
+    public String getDescription() {
+        return super.getDescription() + ", Milk";
+    }
+
+    @Override
+    public double getCost() {
+        return super.getCost() + 1.5; // Cost of milk
+    }
+}
+
+// Concrete Decorator for Sugar
+public class SugarDecorator extends CoffeeDecorator {
+    public SugarDecorator(Coffee coffee) {
+        super(coffee);
+    }
+
+    @Override
+    public String getDescription() {
+        return super.getDescription() + ", Sugar";
+    }
+
+    @Override
+    public double getCost() {
+        return super.getCost() + 0.5; // Cost of sugar
+    }
+}
+Step 5: Use the Decorators
+
+public class CoffeeShop {
+    public static void main(String[] args) {
+        Coffee coffee = new SimpleCoffee(); // Base coffee
+        System.out.println(coffee.getDescription() + " Cost: $" + coffee.getCost());
+
+        coffee = new MilkDecorator(coffee); // Add milk
+        System.out.println(coffee.getDescription() + " Cost: $" + coffee.getCost());
+
+        coffee = new SugarDecorator(coffee); // Add sugar
+        System.out.println(coffee.getDescription() + " Cost: $" + coffee.getCost());
+    }
+}
+Output
+bash
+Copy code
+Simple Coffee Cost: $5.0
+Simple Coffee, Milk Cost: $6.5
+Simple Coffee, Milk, Sugar Cost: $7.0
