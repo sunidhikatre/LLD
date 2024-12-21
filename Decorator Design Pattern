@@ -3,6 +3,9 @@ The Decorator Design Pattern is used to dynamically add functionality to an obje
 Concept Example
 Imagine a coffee shop where you can add extras like milk or sugar to a coffee. Each addition increases the cost, but the base coffee remains unchanged.
 
+https://www.geeksforgeeks.org/decorator-pattern/
+Check diagram for this
+
 Step 1: Define the Component Interface
 
 // Component
