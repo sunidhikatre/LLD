@@ -1,0 +1,34 @@
+interface Pen {
+    void write(String text);
+}
+
+class Marker {
+    public void mark(String text) {
+        System.out.println("Marking: " + text);
+    }
+}
+
+class PenAdapter implements Pen {
+    private Marker marker;
+
+    public PenAdapter(Marker marker) {
+        this.marker = marker;
+    }
+
+    @Override
+    public void write(String text) {
+        marker.mark(text); // Adapts 'mark' method to 'write'
+    }
+}
+
+public class AdapterPatternExample {
+    public static void main(String[] args) {
+        Marker marker = new Marker();
+        Pen pen = new PenAdapter(marker); // Adapting Marker to Pen
+
+        pen.write("This is adapted text."); // Calls the marker's method internally
+    }
+}
+Client: The main method expects a Pen object.
+Third-party/Legacy Code: The Marker class has a different method signature.
+Adapter: PenAdapter bridges the gap, making the Marker class compatible with the Pen interface.
