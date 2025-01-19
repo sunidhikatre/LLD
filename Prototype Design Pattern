@@ -1,0 +1,86 @@
+public interface Shape extends Cloneable {
+    Shape clone(); // Method for cloning
+    void draw();   // Method to display shape details
+}
+
+public class Circle implements Shape {
+    private int radius;
+    private String color;
+
+    public Circle(int radius, String color) {
+        this.radius = radius;
+        this.color = color;
+    }
+
+    // Copy constructor for cloning
+    private Circle(Circle source) {
+        this.radius = source.radius;
+        this.color = source.color;
+    }
+
+    @Override
+    public Shape clone() {
+        return new Circle(this); // Use the copy constructor
+    }
+
+    @Override
+    public void draw() {
+        System.out.println("Drawing a Circle with radius " + radius + " and color " + color);
+    }
+}
+
+
+public class Rectangle implements Shape {
+    private int width;
+    private int height;
+    private String color;
+
+    public Rectangle(int width, int height, String color) {
+        this.width = width;
+        this.height = height;
+        this.color = color;
+    }
+
+    // Copy constructor for cloning
+    private Rectangle(Rectangle source) {
+        this.width = source.width;
+        this.height = source.height;
+        this.color = source.color;
+    }
+
+    @Override
+    public Shape clone() {
+        return new Rectangle(this); // Use the copy constructor
+    }
+
+    @Override
+    public void draw() {
+        System.out.println("Drawing a Rectangle with width " + width + ", height " + height + " and color " + color);
+    }
+}
+
+public class PrototypePatternDemo {
+    public static void main(String[] args) {
+        // Create original shapes
+        Circle originalCircle = new Circle(5, "Red");
+        Rectangle originalRectangle = new Rectangle(10, 20, "Blue");
+
+        // Clone the shapes
+        Circle clonedCircle = (Circle) originalCircle.clone();
+        Rectangle clonedRectangle = (Rectangle) originalRectangle.clone();
+
+        // Display the original and cloned shapes
+        System.out.println("Original Shapes:");
+        originalCircle.draw();
+        originalRectangle.draw();
+
+        System.out.println("\nCloned Shapes:");
+        clonedCircle.draw();
+        clonedRectangle.draw();
+    }
+}
+
+How This Demonstrates the Prototype Pattern
+Cloneability: Shapes are cloned using the clone method, avoiding the need for manual field-by-field copying.
+Reusability: The Shape interface defines a contract for cloning, making it easy to add new shape types.
+Efficiency: Instead of creating new shapes from scratch, the system clones existing ones, saving computation and ensuring consistent state.
