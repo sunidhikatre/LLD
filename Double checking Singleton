@@ -1,0 +1,45 @@
+Private Constructor
+The private constructor ensures that no other class can directly instantiate ThreadSafeDatabaseManager. This restricts the creation of objects to within the class itself.
+
+Static Instance Variable
+The private static ThreadSafeDatabaseManager instance; variable is shared across all calls to the getInstance() method. It holds the singleton instance once created.
+
+Synchronized Method
+The synchronized keyword in public static synchronized ThreadSafeDatabaseManager getInstance() ensures that only one thread can execute the method at a time. This prevents race conditions where multiple threads might try to create an instance simultaneously.
+
+public class ThreadSafeDatabaseManager {
+    private static ThreadSafeDatabaseManager instance;
+
+    private ThreadSafeDatabaseManager() {}
+
+    public static synchronized ThreadSafeDatabaseManager getInstance() {
+        if (instance == null) {
+            instance = new ThreadSafeDatabaseManager();
+        }
+        return instance;
+    }
+
+    public void connect() {
+        System.out.println("Connected to the database.");
+    }
+}
+
+
+
+public class Singleton {
+    private static volatile Singleton instance; // Ensure visibility across threads.
+
+    // Private constructor to prevent instantiation.
+    private Singleton() {}
+
+    public static Singleton getInstance() {
+        if (instance == null) { // First check (no locking).
+            synchronized (Singleton.class) { // Locking.
+                if (instance == null) { // Second check (with lock).
+                    instance = new Singleton();
+                }
+            }
+        }
+        return instance;
+    }
+}
