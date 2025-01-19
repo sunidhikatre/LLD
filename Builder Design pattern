@@ -1,0 +1,59 @@
+public class Car {
+    private String engine;
+    private int wheels;
+    private boolean airConditioning;
+
+    // Private constructor to enforce the use of the builder
+    private Car(CarBuilder builder) {
+        this.engine = builder.engine;
+        this.wheels = builder.wheels;
+        this.airConditioning = builder.airConditioning;
+    }
+
+    @Override
+    public String toString() {
+        return "Car{" +
+                "engine='" + engine + '\'' +
+                ", wheels=" + wheels +
+                ", airConditioning=" + airConditioning +
+                '}';
+    }
+
+    // Static nested Builder class
+    public static class CarBuilder {
+        private String engine;
+        private int wheels;
+        private boolean airConditioning;
+
+        public CarBuilder setEngine(String engine) {
+            this.engine = engine;
+            return this;
+        }
+
+        public CarBuilder setWheels(int wheels) {
+            this.wheels = wheels;
+            return this;
+        }
+
+        public CarBuilder setAirConditioning(boolean airConditioning) {
+            this.airConditioning = airConditioning;
+            return this;
+        }
+
+        public Car build() {
+            return new Car(this);
+        }
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Car car = new Car.CarBuilder()
+                .setEngine("V8")
+                .setWheels(4)
+                .setAirConditioning(true)
+                .build();
+
+        System.out.println(car);
+    }
+}
