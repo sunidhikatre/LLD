@@ -1,0 +1,63 @@
+public interface Shape {
+    void draw();
+}
+
+public class Circle implements Shape {
+    @Override
+    public void draw() {
+        System.out.println("Drawing a Circle");
+    }
+}
+
+public class Rectangle implements Shape {
+    @Override
+    public void draw() {
+        System.out.println("Drawing a Rectangle");
+    }
+}
+
+public class Square implements Shape {
+    @Override
+    public void draw() {
+        System.out.println("Drawing a Square");
+    }
+}
+
+public class ShapeFactory {
+    public Shape getShape(String shapeType) {
+        if (shapeType == null) {
+            return null;
+        }
+        switch (shapeType.toLowerCase()) {
+            case "circle":
+                return new Circle();
+            case "rectangle":
+                return new Rectangle();
+            case "square":
+                return new Square();
+            default:
+                throw new IllegalArgumentException("Unknown shape type: " + shapeType);
+        }
+    }
+}
+
+public class FactoryPatternExample {
+    public static void main(String[] args) {
+        ShapeFactory shapeFactory = new ShapeFactory();
+
+        // Get a Circle object and call its draw method
+        Shape circle = shapeFactory.getShape("circle");
+        circle.draw();
+
+        // Get a Rectangle object and call its draw method
+        Shape rectangle = shapeFactory.getShape("rectangle");
+        rectangle.draw();
+
+        // Get a Square object and call its draw method
+        Shape square = shapeFactory.getShape("square");
+        square.draw();
+    }
+}
+Loose Coupling: The client code depends on the Shape interface, not specific implementations.
+Centralized Creation: Object creation logic is centralized in the factory, making it easier to manage.
+Open/Closed Principle: Adding new shapes requires minimal changes, as you can add new classes and extend the factory logic.
