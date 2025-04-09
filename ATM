@@ -1,0 +1,150 @@
+public interface ATMState {
+    void insertCard();
+    void ejectCard();
+    void enterPin(int pin);
+    void withdrawCash(int amount);
+}
+
+public class IdleState implements ATMState {
+    ATM atm;
+
+    public IdleState(ATM atm) {
+        this.atm = atm;
+    }
+
+    public void insertCard() {
+        System.out.println("Card Inserted");
+        atm.setCurrentATMState(atm.getHasCardState());
+    }
+
+    public void ejectCard() {
+        System.out.println("No card to eject.");
+    }
+
+    public void enterPin(int pin) {
+        System.out.println("Insert card first.");
+    }
+
+    public void withdrawCash(int amount) {
+        System.out.println("Insert card first.");
+    }
+}
+
+public class HasCardState implements ATMState {
+    ATM atm;
+
+    public HasCardState(ATM atm) {
+        this.atm = atm;
+    }
+
+    public void insertCard() {
+        System.out.println("Card already inserted.");
+    }
+
+    public void ejectCard() {
+        System.out.println("Card ejected.");
+        atm.setCurrentATMState(atm.getIdleState());
+    }
+
+    public void enterPin(int pin) {
+        if (pin == 1234) {
+            System.out.println("PIN correct.");
+            atm.setCurrentATMState(atm.getAuthenticatedState());
+        } else {
+            System.out.println("Incorrect PIN.");
+        }
+    }
+
+    public void withdrawCash(int amount) {
+        System.out.println("Enter PIN first.");
+    }
+}
+
+public class AuthenticatedState implements ATMState {
+    ATM atm;
+
+    public AuthenticatedState(ATM atm) {
+        this.atm = atm;
+    }
+
+    public void insertCard() {
+        System.out.println("Card already inserted.");
+    }
+
+    public void ejectCard() {
+        System.out.println("Card ejected.");
+        atm.setCurrentATMState(atm.getIdleState());
+    }
+
+    public void enterPin(int pin) {
+        System.out.println("PIN already entered.");
+    }
+
+    public void withdrawCash(int amount) {
+        if (atm.getAtmBalance() >= amount) {
+            System.out.println("Withdrawing: " + amount);
+            atm.deductATMBalance(amount);
+            System.out.println("Please collect your cash.");
+            atm.setCurrentATMState(atm.getIdleState());
+        } else {
+            System.out.println("Insufficient funds.");
+            atm.setCurrentATMState(atm.getIdleState());
+        }
+    }
+}
+
+public class ATM {
+    private ATMState idleState;
+    private ATMState hasCardState;
+    private ATMState authenticatedState;
+
+    private ATMState currentATMState;
+
+    private int atmBalance;
+
+    public ATM() {
+        idleState = new IdleState(this);
+        hasCardState = new HasCardState(this);
+        authenticatedState = new AuthenticatedState(this);
+
+        currentATMState = idleState;
+        atmBalance = 10000;
+    }
+
+    public void setCurrentATMState(ATMState state) {
+        currentATMState = state;
+    }
+
+    public ATMState getIdleState() { return idleState; }
+    public ATMState getHasCardState() { return hasCardState; }
+    public ATMState getAuthenticatedState() { return authenticatedState; }
+
+    public int getAtmBalance() { return atmBalance; }
+    public void deductATMBalance(int amount) {
+        atmBalance -= amount;
+    }
+
+    // Delegated methods
+    public void insertCard() { currentATMState.insertCard(); }
+    public void ejectCard() { currentATMState.ejectCard(); }
+    public void enterPin(int pin) { currentATMState.enterPin(pin); }
+    public void withdrawCash(int amount) { currentATMState.withdrawCash(amount); }
+}
+
+public class ATMTest {
+    public static void main(String[] args) {
+        ATM atm = new ATM();
+
+        atm.insertCard();
+        atm.enterPin(1234);
+        atm.withdrawCash(3000);
+
+        System.out.println("Remaining balance: " + atm.getAtmBalance());
+    }
+}
+
+
+
+
+
+
