@@ -1,0 +1,43 @@
+public class RateLimiter {
+    private final int maxRequestsPerSecond;
+    private int tokens;
+    private long lastRefillTime;
+
+    public RateLimiter(int maxRequestsPerSecond) {
+        this.maxRequestsPerSecond = maxRequestsPerSecond;
+        this.tokens = maxRequestsPerSecond;
+        this.lastRefillTime = System.currentTimeMillis();
+    }
+
+    public synchronized boolean allowRequest() {
+        long now = System.currentTimeMillis();
+
+        // Check if a second has passed
+        if (now - lastRefillTime >= 1000) {
+            tokens = maxRequestsPerSecond; // refill tokens
+            lastRefillTime = now;
+        }
+
+        if (tokens > 0) {
+            tokens--;
+            return true;
+        }
+
+        return false;
+    }
+}
+public class Main {
+    public static void main(String[] args) throws InterruptedException {
+        RateLimiter limiter = new RateLimiter(3); // 3 requests per second
+
+        for (int i = 0; i < 10; i++) {
+            if (limiter.allowRequest()) {
+                System.out.println("Request " + i + " allowed");
+            } else {
+                System.out.println("Request " + i + " blocked");
+            }
+
+            Thread.sleep(200); // simulate delay between requests
+        }
+    }
+}
