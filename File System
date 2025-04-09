@@ -1,0 +1,85 @@
+abstract class FileEntity {
+    protected String name;
+
+    public FileEntity(String name) {
+        this.name = name;
+    }
+
+    public abstract void display(String indent);
+}
+
+abstract class FileEntity {
+    protected String name;
+
+    public FileEntity(String name) {
+        this.name = name;
+    }
+
+    public abstract void display(String indent);
+}
+
+
+class Folder extends FileEntity {
+    private List<FileEntity> children = new ArrayList<>();
+
+    public Folder(String name) {
+        super(name);
+    }
+
+    public void add(FileEntity entity) {
+        children.add(entity);
+    }
+
+    public void remove(FileEntity entity) {
+        children.remove(entity);
+    }
+
+    @Override
+    public void display(String indent) {
+        System.out.println(indent + "Folder: " + name);
+        for (FileEntity child : children) {
+            child.display(indent + "  ");
+        }
+    }
+}
+
+
+class FileSystemFactory {
+
+    public static FileEntity createFile(String name) {
+        return new File(name);
+    }
+
+    public static FileEntity createFolder(String name) {
+        return new Folder(name);
+    }
+}
+
+
+public class FileSystemDemo {
+    public static void main(String[] args) {
+        Folder root = (Folder) FileSystemFactory.createFolder("root");
+
+        File file1 = (File) FileSystemFactory.createFile("file1.txt");
+        File file2 = (File) FileSystemFactory.createFile("file2.txt");
+
+        Folder subFolder = (Folder) FileSystemFactory.createFolder("subFolder");
+        File file3 = (File) FileSystemFactory.createFile("file3.txt");
+
+        root.add(file1);
+        root.add(subFolder);
+        subFolder.add(file2);
+        subFolder.add(file3);
+
+        root.display("");
+    }
+}
+
+Folder: root
+  File: file1.txt
+  Folder: subFolder
+    File: file2.txt
+    File: file3.txt
+
+
+
