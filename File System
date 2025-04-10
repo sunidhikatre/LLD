@@ -8,15 +8,17 @@ abstract class FileEntity {
     public abstract void display(String indent);
 }
 
-abstract class FileEntity {
-    protected String name;
-
-    public FileEntity(String name) {
-        this.name = name;
+class File extends FileEntity {
+    public File(String name) {
+        super(name);
     }
 
-    public abstract void display(String indent);
+    @Override
+    public void display(String indent) {
+        System.out.println(indent + "File: " + name);
+    }
 }
+
 
 
 class Folder extends FileEntity {
